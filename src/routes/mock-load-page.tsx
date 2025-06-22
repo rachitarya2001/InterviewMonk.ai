@@ -13,6 +13,7 @@ import Webcam from "react-webcam";
 const MockLoadPage = () => {
     const { interviewId } = useParams<{ interviewId: string }>();
     const [interview, setInterview] = useState<Interview | null>(null);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [isloading, setIsLoading] = useState(false)
     const [isWebCamEnable, setIsWebCamEnable] = useState(false);
 
@@ -67,7 +68,7 @@ const MockLoadPage = () => {
 
             </div>
 
-            {interview && <InterviewPin interview={interview} onMockPage />}\
+            {interview && <InterviewPin interview={interview} onMockPage />}
 
             <Alert className="bg-yellow-100/50 border-yellow-200 p-4 rounded-lg">
                 <Lightbulb className="h-5 w-5 text-yellow-600" />

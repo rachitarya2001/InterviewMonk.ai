@@ -4,7 +4,7 @@ import { Separator } from "@/components/ui/separator"
 import { Plus } from "lucide-react"
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-import type { Interview, User } from '../types/index';
+import type { Interview } from '../types/index';
 import { useAuth } from "@clerk/clerk-react"
 import { collection, onSnapshot, query, where } from "firebase/firestore"
 import { db } from "@/config/firebase.config"
@@ -35,6 +35,7 @@ const Dashboard = () => {
             }) as Interview[]
             setinterviews(interviewList)
             setLoading(false)
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         }, (error) => {
             toast.error("Eror..", {
                 description: "Something went wrong.. Try again Later..",

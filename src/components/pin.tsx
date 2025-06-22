@@ -1,19 +1,15 @@
 import type { Interview } from "@/types"
-import { useAuth } from "@clerk/clerk-react";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
     Card,
-    CardContent,
     CardDescription,
     CardFooter,
-    CardHeader,
     CardTitle,
 } from "@/components/ui/card"
 import { Badge } from "./ui/badge";
 import { cn } from "@/lib/utils";
 import TooltipButton from "./tooltip-button";
-import { Eye, Newspaper, Pencil, Sparkle } from "lucide-react";
+import { Eye, Newspaper, Sparkle } from "lucide-react";
 
 interface InterviewPinProps {
     interview: Interview
@@ -21,9 +17,7 @@ interface InterviewPinProps {
 }
 
 const InterviewPin = ({ interview, onMockPage = false }: InterviewPinProps) => {
-    const [loading, setLoading] = useState(false)
     const navigate = useNavigate();
-    const { userId } = useAuth();
 
 
     return (
@@ -80,12 +74,7 @@ const InterviewPin = ({ interview, onMockPage = false }: InterviewPinProps) => {
                             buttonClassName="hover:text-sky-500"
                             icon={<Sparkle />}
                             loading={false}
-
                         />
-
-
-
-
                     </div>
                 )}
             </CardFooter>

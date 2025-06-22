@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useAuth } from "@clerk/clerk-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -41,7 +42,7 @@ const RecordAnswer = ({ question, isWebCam, setIsWebCam }: RecordAnswerProps) =>
     const [open, setOpen] = useState(false);
     const { userId } = useAuth();
     const { interviewId } = useParams();
-    const [isWebCamEnable, setIsWebCamEnable] = useState(false);
+    const [, setIsWebCamEnable] = useState(false);
     const [loading, setLoading] = useState(false);
 
     const recordUserAnswer = async () => {
@@ -158,16 +159,6 @@ Return the result in JSON format with the fields "rating" (number) and "feedback
                 });
                 return;
             } else {
-                const questionAnswerRef = await addDoc(collection(db, "userAnswers"), {
-                    mockIdRef: interviewId,
-                    question: question.question,
-                    correct_ans: question.answer,
-                    user_ans: userAnswer,
-                    feedback: aiResult.feedback,
-                    rating: aiResult.rating,
-                    userId,
-                    createdAt: serverTimestamp(),
-                });
                 toast("Saved", { description: "Your answer has been saved.." })
             }
             setUserAnswer("");
