@@ -46,7 +46,7 @@ const HomePage = () => {
 
                 <div className="w-full mt-4 rounded-md bg-gray-100 h-[480px] drop-shadow-sm overflow-hidden">
                     <img
-                        src="public\assets\img\hero.jpg"
+                        src="/assets/img/hero.jpg"
                         alt=""
                         className="w-full h-full object-cover"
                     />
@@ -73,14 +73,14 @@ const HomePage = () => {
             {/* {marque section} */}
             <div className="w-full my-12">
                 <Marquee pauseOnHover>
-                    <MarqueImg img="public\assets\img\logo\firebase.png" />
-                    <MarqueImg img="public\assets\img\logo\meet.png" />
-                    <MarqueImg img="public\assets\img\logo\microsoft.png" />
-                    <MarqueImg img="public\assets\img\logo\react.png" />
-                    <MarqueImg img="public\assets\img\logo\tailwindcss.png" />
-                    <MarqueImg img="public\assets\img\logo\zoom.png" />
-                    <MarqueImg img="public\assets\img\logo\firebase.png" />
-                    <MarqueImg img="public\assets\img\logo\meet.png" />
+                    <MarqueImg img="/assets/img/logo/firebase.png" />
+                    <MarqueImg img="/assets/img/logo/meet.png" />
+                    <MarqueImg img="/assets/img/logo/microsoft.png" />
+                    <MarqueImg img="/assets/img/logo/react.png" />
+                    <MarqueImg img="/assets/img/logo/tailwindcss.png" />
+                    <MarqueImg img="/assets/img/logo/zoom.png" />
+                    <MarqueImg img="/assets/img/logo/firebase.png" />
+                    <MarqueImg img="/assets/img/logo/meet.png" />
                 </Marquee>
             </div>
             <Container className="py-8 space-y-8">

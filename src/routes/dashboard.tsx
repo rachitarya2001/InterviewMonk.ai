@@ -11,7 +11,6 @@ import { db } from "@/config/firebase.config"
 import { toast } from "sonner"
 import { Skeleton } from "@/components/ui/skeleton"
 import InterviewPin from "@/components/pin"
-// import { Interview } from '../types/index';
 
 const Dashboard = () => {
     const [interviews, setinterviews] = useState<Interview[]>([])
@@ -35,9 +34,9 @@ const Dashboard = () => {
             }) as Interview[]
             setinterviews(interviewList)
             setLoading(false)
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         }, (error) => {
-            toast.error("Eror..", {
+            console.error("Firebase error:", error);
+            toast.error("Error..", {
                 description: "Something went wrong.. Try again Later..",
             });
             setLoading(false);
@@ -68,13 +67,13 @@ const Dashboard = () => {
 
             {/* {Content Section} */}
 
-            <div className="md:grid md:grid-col-3 gap-3 py-4 ">
+            <div className="md:grid md:grid-cols-3 gap-3 py-4 ">
                 {loading ? (Array.from({ length: 6 }).map((_, index) => (
                     <Skeleton key={index} className="h-24 md:h-32 rounded-md" />
 
                 ))) : interviews.length > 0 ? (interviews.map((interview) => (<InterviewPin key={interview.id} interview={interview} />))) : (<div className="md:col-span-3 w-full flex flex-grow items-center justify-center h-96 flex-col">
                     <img
-                        src="public\assets\svg\not-found.svg"
+                        src="/assets/svg/not-found.svg"
                         className="w-44 h-44 object-contain"
                         alt=""
                     />
