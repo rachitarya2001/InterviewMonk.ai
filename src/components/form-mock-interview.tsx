@@ -169,6 +169,7 @@ const FormMockInterview = ({ initialData }: FormMockInterviewProps) => {
                         ...data,
                         userId,
                         questions: aiResult,
+                        createdAt: serverTimestamp(),
 
                     });
 
