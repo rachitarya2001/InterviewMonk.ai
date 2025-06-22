@@ -29,21 +29,21 @@ const FeedBack = () => {
     const [feedbacks, setFeedbacks] = useState<UserAnswer[]>([]);
     const [activeFeed, setActiveFeed] = useState("")
 
-    if (!interviewId) {
-        navigate("/generate", { replace: true });
-    }
-
+    // Fixed: Move navigate to useEffect
     useEffect(() => {
+        if (!interviewId) {
+            navigate("/generate", { replace: true });
+            return;
+        }
+
         const fetchInterview = async () => {
-            if (interviewId) {
-                try {
-                    const interviewDoc = await getDoc(doc(db, "interviews", interviewId));
-                    if (interviewDoc.exists()) {
-                        setInterview({ id: interviewDoc.id, ...interviewDoc.data() } as Interview)
-                    }
-                } catch (error) {
-                    console.log(error)
+            try {
+                const interviewDoc = await getDoc(doc(db, "interviews", interviewId));
+                if (interviewDoc.exists()) {
+                    setInterview({ id: interviewDoc.id, ...interviewDoc.data() } as Interview)
                 }
+            } catch (error) {
+                console.log(error)
             }
         };
 
@@ -62,9 +62,10 @@ const FeedBack = () => {
                 })
 
                 setFeedbacks(interviewData);
+                console.log("Fetched feedbacks:", interviewData); // Debug log
             } catch (error) {
                 console.log(error);
-                toast("Error", {
+                toast.error("Error", {
                     description: "Something went wrong. Please try again later.."
                 });
             } finally {
@@ -78,9 +79,8 @@ const FeedBack = () => {
     }, [interviewId, navigate, userId]);
 
     //calculate the ratings
-
     const overAllRating = useMemo(() => {
-        if (feedbacks.length == 0) return "0.0";
+        if (feedbacks.length === 0) return "0.0";
 
         const totalRatings = feedbacks.reduce(
             (acc, feedback) => acc + feedback.rating, 0
@@ -124,7 +124,12 @@ const FeedBack = () => {
                 isSubHeading
             />
 
-            {feedbacks && (
+            {/* Added: Show message when no feedback available */}
+            {feedbacks.length === 0 ? (
+                <div className="text-center py-8">
+                    <p className="text-gray-500">No feedback available yet. Complete some interview questions to see your feedback here.</p>
+                </div>
+            ) : (
                 <Accordion type="single" collapsible className="space-y-6">
                     {feedbacks.map(feed => (
                         <AccordionItem
@@ -135,15 +140,15 @@ const FeedBack = () => {
                                 onClick={() => setActiveFeed(feed.id)}
                                 className={cn(
                                     "px-5 py-3 flex items-center justify-between text-base  rounded-t-lg transition-colors hover:no-underline",
-                                    activeFeed === feed.id ? "bg-gradient-to-r from-purple-50 to-blue-50" : "hover: bg-gray-50"
+                                    activeFeed === feed.id ? "bg-gradient-to-r from-purple-50 to-blue-50" : "hover:bg-gray-50"
                                 )}
                             >
                                 <span>{feed.question}</span>
                             </AccordionTrigger>
                             <AccordionContent className="px-5 py-6 bg-white rounded-b-lg space-y-5 shadow-inner">
-                                <div className="text-lg font-semibold to-gray-700">
+                                <div className="text-lg font-semibold text-gray-700">
                                     <Star className="inline mr-2 text-yellow-400" />
-                                    Rating : {feed.rating}
+                                    Rating : {feed.rating}/10
                                 </div>
 
                                 <Card className="border-none space-y-3 p-4 bg-green-50 rounded-lg shadow-md">
@@ -164,7 +169,7 @@ const FeedBack = () => {
                                     </CardTitle>
 
                                     <CardDescription className="font-medium text-gray-700">
-                                        {feed.user_ans}
+                                        {feed.user_ans || "No answer provided"}
                                     </CardDescription>
                                 </Card>
 

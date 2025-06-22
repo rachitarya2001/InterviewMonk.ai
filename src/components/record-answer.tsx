@@ -41,7 +41,9 @@ const RecordAnswer = ({ question, isWebCam, setIsWebCam }: RecordAnswerProps) =>
     const [aiResult, setAiResult] = useState<AIResponse | null>(null);
     const [open, setOpen] = useState(false);
     const { userId } = useAuth();
-    const { interviewId } = useParams();
+    const { interviewId } = useParams<{ interviewId: string }>();
+
+    useParams();
     const [, setIsWebCamEnable] = useState(false);
     const [loading, setLoading] = useState(false);
 
@@ -78,15 +80,28 @@ const RecordAnswer = ({ question, isWebCam, setIsWebCam }: RecordAnswerProps) =>
         }
 
         try {
-            const cleaned = response.replace(/```json\n?/g, '').replace(/```\n?/g, '');
+            // More thorough cleaning
+            let cleaned = response
+                .replace(/```json\n?/g, '')
+                .replace(/```\n?/g, '')
+                // eslint-disable-next-line no-control-regex
+                .replace(/[\x00-\x1F\x7F]/g, '')  // Remove control characters
+                .trim();
+
+            // Try to extract JSON if it's wrapped in other text
+            const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
+            if (jsonMatch) {
+                cleaned = jsonMatch[0];
+            }
+
             const parsed = JSON.parse(cleaned);
             return parsed as AIResponse;
         } catch (error) {
             console.error("Error cleaning AI response:", error);
+            console.error("Raw response:", response); // Added for debugging
             return null;
         }
     };
-
 
 
     const generateResult = async (qst: string, qstAns: string, userAns: string): Promise<AIResponse> => {
@@ -115,6 +130,8 @@ Return the result in JSON format with the fields "rating" (number) and "feedback
                 }
             });
 
+            console.log("Raw AI Response:", aiResult.text);
+
             const responseText = aiResult.text || "";
             const parsedResult = cleanJsonResponse(responseText);
 
@@ -132,6 +149,7 @@ Return the result in JSON format with the fields "rating" (number) and "feedback
 
     const recordNewAnswer = () => {
         setUserAnswer("");
+        setAiResult(null);
         stopSpeechToText();
         startSpeechToText();
     };
@@ -159,9 +177,21 @@ Return the result in JSON format with the fields "rating" (number) and "feedback
                 });
                 return;
             } else {
+                await addDoc(collection(db, "userAnswers"), {
+                    mockIdRef: interviewId,
+                    question: question.question,
+                    correct_ans: question.answer,
+                    user_ans: userAnswer,
+                    feedback: aiResult.feedback,
+                    rating: aiResult.rating,
+                    userId,
+                    createdAt: serverTimestamp(),
+                });
+
                 toast("Saved", { description: "Your answer has been saved.." })
             }
             setUserAnswer("");
+            setAiResult(null);
             stopSpeechToText();
 
 

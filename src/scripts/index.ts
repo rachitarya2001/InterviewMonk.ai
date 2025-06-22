@@ -4,7 +4,7 @@ import {
     HarmBlockThreshold
 } from '@google/genai';
 
-// ✅ Move this OUTSIDE main() function
+// Initialize AI instance
 const ai = new GoogleGenAI({
     apiKey: import.meta.env.VITE_GEMINI_API_KEY,
 });
@@ -28,46 +28,12 @@ const safetySettings = [
     }
 ];
 
-async function main() {
-    // ❌ Remove ai definition from here since it's now above
-    const config = {
-        thinkingConfig: {
-            thinkingBudget: -1,
-        },
-        responseMimeType: 'text/plain',
-        safetySettings, // ✅ Add safety settings here too
-    };
-    const model = 'gemini-2.5-pro';
-    const contents = [
-        {
-            role: 'user',
-            parts: [
-                {
-                    text: `INSERT_INPUT_HERE`,
-                },
-            ],
-        },
-    ];
-
-    const response = await ai.models.generateContentStream({
-        model,
-        config,
-        contents,
-    });
-
-    for await (const chunk of response) {
-        console.log(chunk.text);
-    }
-}
-
-main();
-
-// ✅ Now this will work because ai is defined above
 export const chatSession = ai.chats.create({
-    model: 'gemini-2.5-pro',
+    model: 'gemini-2.0-flash-001',
     config: {
         safetySettings,
     }
 });
-// In your @/scripts/index.ts file - add these exports:
+
 export { ai, safetySettings };
+

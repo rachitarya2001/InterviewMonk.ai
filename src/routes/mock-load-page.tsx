@@ -13,8 +13,7 @@ import Webcam from "react-webcam";
 const MockLoadPage = () => {
     const { interviewId } = useParams<{ interviewId: string }>();
     const [interview, setInterview] = useState<Interview | null>(null);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [isloading, setIsLoading] = useState(false)
+    const [isloading] = useState(false)
     const [isWebCamEnable, setIsWebCamEnable] = useState(false);
 
 

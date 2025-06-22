@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { db } from '@/config/firebase.config';
 import type { Interview } from '@/types';
 import { doc, getDoc } from 'firebase/firestore';
@@ -15,7 +14,7 @@ const MockInterviewPage = () => {
 
     const { interviewId } = useParams<{ interviewId: string }>();
     const [interview, setInterview] = useState<Interview | null>(null);
-    const [isloading, setIsLoading] = useState(false);
+    const [isloading] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
