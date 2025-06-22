@@ -27,7 +27,7 @@ const Header = () => {
                         {userId && (
                             <NavLink
 
-                                to={"*/generate"}
+                                to={"/generate"}
                                 className={({ isActive }) => cn(
                                     "text-base text-neutral-600",
                                     isActive && "text-neutral-900 font-semibold"
